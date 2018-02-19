@@ -1,0 +1,73 @@
+[09:45:41] [main/INFO]: Setting user: Player832
+[09:45:43] [main/WARN]: Skipping bad option: lastServer:
+[09:45:43] [main/INFO]: LWJGL Version: 2.9.4
+[09:45:46] [main/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Fighting Maid Mod, summerfields_1.11.zip
+[09:45:47] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[09:45:47] [Thread-5/INFO]: Initializing LWJGL OpenAL
+[09:45:47] [Thread-5/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[09:45:47] [Thread-5/INFO]: OpenAL initialized.
+[09:45:48] [Sound Library Loader/INFO]: Sound engine started
+[09:45:50] [main/INFO]: Created: 1024x1024 textures-atlas
+[09:45:52] [main/WARN]: Skipping bad option: lastServer:
+[09:45:52] [main/INFO]: Narrator library for x64 successfully loaded
+[09:45:53] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
+[09:46:03] [Server thread/INFO]: Starting integrated minecraft server version 1.12.2
+[09:46:03] [Server thread/INFO]: Generating keypair
+[09:46:04] [Server thread/INFO]: Loaded 488 advancements
+[09:46:04] [Server thread/INFO]: Preparing start region for level 0
+[09:46:04] [Server thread/WARN]: Keeping entity minecraft:chicken that already exists with UUID 0ea40700-cb7a-4acb-a63f-504093ca3afd
+[09:46:04] [Server thread/WARN]: Keeping entity minecraft:chicken that already exists with UUID 0ea40700-cb7a-4acb-a63f-504093ca3afd
+[09:46:04] [Server thread/WARN]: Keeping entity minecraft:chicken that already exists with UUID 89d392e1-6f16-4c35-9b8f-372f113dcfce
+[09:46:04] [Server thread/WARN]: Keeping entity minecraft:sheep that already exists with UUID f721a1f7-5054-49b7-b600-265fa57b88c9
+[09:46:04] [Server thread/WARN]: Keeping entity minecraft:sheep that already exists with UUID a0d27bec-d9e3-432a-bdf0-6b8c7898b408
+[09:46:05] [Server thread/WARN]: Keeping entity minecraft:sheep that already exists with UUID 785bb469-7fb7-407a-8a02-5afcf743a643
+[09:46:05] [Server thread/WARN]: Keeping entity minecraft:sheep that already exists with UUID 557e16da-f5f6-4200-832a-fa50f5bcfb90
+[09:46:05] [Server thread/WARN]: Keeping entity minecraft:sheep that already exists with UUID b065e536-453b-4322-bbc5-a60fd9e1f02d
+[09:46:05] [Server thread/WARN]: Keeping entity minecraft:sheep that already exists with UUID 92b2b10a-b7db-45a0-af46-b94c0b38f5ea
+[09:46:05] [Server thread/WARN]: Keeping entity minecraft:sheep that already exists with UUID 79e3946b-910d-4093-9341-5a7fdfc7a09b
+[09:46:05] [Server thread/INFO]: Changing view distance to 12, from 10
+[09:46:08] [Server thread/INFO]: Player832[local:E:cb1fd927] logged in with entity id 253 at (858.8261265944291, 69.4207438519349, -886.4376109741736)
+[09:46:08] [Server thread/INFO]: Player832加入了游戏
+[09:46:08] [Server thread/INFO]: Saving and pausing game...
+[09:46:08] [Server thread/INFO]: Saving chunks for level 'demo'/overworld
+[09:46:08] [main/INFO]: Loaded 45 advancements
+[09:46:08] [Server thread/INFO]: Saving chunks for level 'demo'/the_nether
+[09:46:08] [Server thread/INFO]: Saving chunks for level 'demo'/the_end
+[09:46:09] [pool-2-thread-1/WARN]: Couldn't look up profile properties for com.mojang.authlib.GameProfile@506076c2[id=792573f3-7356-38b9-b291-6ba6c7176e80,name=Player832,properties={},legacy=false]
+com.mojang.authlib.exceptions.AuthenticationException: The client has sent too many requests within a certain amount of time
+	at com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService.makeRequest(YggdrasilAuthenticationService.java:79) ~[YggdrasilAuthenticationService.class:?]
+	at com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.fillGameProfile(YggdrasilMinecraftSessionService.java:180) [YggdrasilMinecraftSessionService.class:?]
+	at com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService$1.load(YggdrasilMinecraftSessionService.java:60) [YggdrasilMinecraftSessionService$1.class:?]
+	at com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService$1.load(YggdrasilMinecraftSessionService.java:57) [YggdrasilMinecraftSessionService$1.class:?]
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3716) [guava-21.0.jar:?]
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2424) [guava-21.0.jar:?]
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2298) [guava-21.0.jar:?]
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2211) [guava-21.0.jar:?]
+	at com.google.common.cache.LocalCache.get(LocalCache.java:4154) [guava-21.0.jar:?]
+	at com.google.common.cache.LocalCache.getOrLoad(LocalCache.java:4158) [guava-21.0.jar:?]
+	at com.google.common.cache.LocalCache$LocalLoadingCache.get(LocalCache.java:5147) [guava-21.0.jar:?]
+	at com.google.common.cache.LocalCache$LocalLoadingCache.getUnchecked(LocalCache.java:5153) [guava-21.0.jar:?]
+	at com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.fillProfileProperties(YggdrasilMinecraftSessionService.java:170) [YggdrasilMinecraftSessionService.class:?]
+	at net.minecraft.client.Minecraft.getProfileProperties(Minecraft.java:3188) [Minecraft.class:?]
+	at net.minecraft.client.resources.SkinManager$3.run(SkinManager.java:138) [SkinManager$3.class:?]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source) [?:1.8.0_161]
+	at java.util.concurrent.FutureTask.run(Unknown Source) [?:1.8.0_161]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source) [?:1.8.0_161]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source) [?:1.8.0_161]
+	at java.lang.Thread.run(Unknown Source) [?:1.8.0_161]
+[09:46:14] [Server thread/INFO]: Saving and pausing game...
+[09:46:14] [Server thread/INFO]: Saving chunks for level 'demo'/overworld
+[09:46:14] [Server thread/INFO]: Saving chunks for level 'demo'/the_nether
+[09:46:14] [Server thread/INFO]: Saving chunks for level 'demo'/the_end
+[09:46:15] [Server thread/INFO]: Stopping server
+[09:46:15] [Server thread/INFO]: Saving players
+[09:46:15] [Server thread/INFO]: Player832 lost connection: 连接中止
+[09:46:15] [Server thread/INFO]: Player832退出了游戏
+[09:46:15] [Server thread/INFO]: Stopping singleplayer server as player logged out
+[09:46:15] [Server thread/INFO]: Saving worlds
+[09:46:15] [Server thread/INFO]: Saving chunks for level 'demo'/overworld
+[09:46:15] [Server thread/INFO]: Saving chunks for level 'demo'/the_nether
+[09:46:15] [Server thread/INFO]: Saving chunks for level 'demo'/the_end
+[09:46:16] [main/INFO]: Stopping!
+[09:46:16] [main/INFO]: SoundSystem shutting down...
+[09:46:16] [main/WARN]: Author: Paul Lamb, www.paulscode.com
