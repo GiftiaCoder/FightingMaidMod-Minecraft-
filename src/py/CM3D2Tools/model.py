@@ -151,8 +151,16 @@ def print_dict(f, d, prefix = ''):
 
 model_archive = {}
 model = {}
-load_model('D:\\DEV\\CM3D2\\ARC\\model\\model\\model\\face\\face005\\face005.model', model_archive)
+load_model('D:\\DEV\\CM3D2\\ARC\\model\\model\\model\\body\\seieki\\spe_body0.model', model_archive)
 build_model(model_archive, model)
+
+#print('----------------------------------------')
+#print(model_archive['base_bone'])
+#print('----------------------------------------')
+#print(model_archive['local_bone_list'])
+#print('----------------------------------------')
+#print(model_archive['bone_data'])
+#print('----------------------------------------')
 
 file = open('..\\..\\..\\run\\model.arc', 'w')
 
@@ -161,7 +169,9 @@ for vertex in model_archive['vertex_list']:
     #print(vertex)
     coord = vertex['coord']
     normal = vertex['normal']
-    file.write('%f %f %f %f %f %f\n' % (coord[0], coord[1], coord[2], normal[0], normal[1], normal[2]))
+    file.write('%s %s %s %s %s %s\n' %
+               (str(coord[0]), str(coord[1]), str(coord[2]),
+                str(normal[0]), str(normal[1]), str(normal[2])))
 
 mesh_list = model_archive['mesh_list']
 file.write(str(len(mesh_list)) + '\n')

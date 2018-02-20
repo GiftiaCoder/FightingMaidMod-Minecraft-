@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="cuda">
+      <UniqueIdentifier>{915bc848-b750-40fd-b7eb-cd00c414e050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cuda\algo">
+      <UniqueIdentifier>{278f66d8-ebcb-4086-93bf-3ec5689d6fc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3d">
+      <UniqueIdentifier>{b616ac10-a7da-41ac-9247-fd33fa3b2cf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{cfb37b80-446e-44b6-b55a-84d7f45a6b1d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cuArray.h">
+      <Filter>cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="CudaRuntime.h">
+      <Filter>cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="transformer.h">
+      <Filter>cuda\algo</Filter>
+    </ClInclude>
+    <ClInclude Include="Bone.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="vec.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CudaRuntime.cpp">
+      <Filter>cuda</Filter>
+    </ClCompile>
+    <ClCompile Include="Bone.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="transformer.cu">
+      <Filter>cuda\algo</Filter>
+    </CudaCompile>
+  </ItemGroup>
+</Project>
