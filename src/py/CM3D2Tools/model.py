@@ -149,10 +149,20 @@ def print_dict(f, d, prefix = ''):
             f.write('%s%s: %s\n' % (prefix, str(k), str(v)))
             #print('%s%s: %s' % (prefix, str(k), str(v)))
 
+def analyze_morph(model):
+    file = open('morph.txt', 'w')
+    for morph in model['morph_list']:
+        file.write('%s, %d\n' % (morph['name'], morph['vertex_num']))
+        for vertex in morph['vertex_data']:
+            file.write(str(vertex) + '\n')
+    file.close()
+
 model_archive = {}
 model = {}
 load_model('D:\\DEV\\CM3D2\\ARC\\model\\model\\model\\body\\seieki\\spe_body0.model', model_archive)
 build_model(model_archive, model)
+
+analyze_morph(model_archive)
 
 #print('----------------------------------------')
 #print(model_archive['base_bone'])
@@ -162,25 +172,25 @@ build_model(model_archive, model)
 #print(model_archive['bone_data'])
 #print('----------------------------------------')
 
-file = open('..\\..\\..\\run\\model.arc', 'w')
-
-file.write(str(len(model_archive['vertex_list'])) + '\n')
-for vertex in model_archive['vertex_list']:
+#file = open('..\\..\\..\\run\\face005.model.txt', 'w')
+#
+#file.write(str(len(model_archive['vertex_list'])) + '\n')
+#for vertex in model_archive['vertex_list']:
     #print(vertex)
-    coord = vertex['coord']
-    normal = vertex['normal']
-    file.write('%s %s %s %s %s %s\n' %
-               (str(coord[0]), str(coord[1]), str(coord[2]),
-                str(normal[0]), str(normal[1]), str(normal[2])))
+#    coord = vertex['coord']
+#    normal = vertex['normal']
+#    file.write('%s %s %s %s %s %s\n' %
+#               (str(coord[0]), str(coord[1]), str(coord[2]),
+#                str(normal[0]), str(normal[1]), str(normal[2])))
 
-mesh_list = model_archive['mesh_list']
-file.write(str(len(mesh_list)) + '\n')
-for mesh_data in mesh_list:
-    file.write(str(len(mesh_data['face_list'])) + '\n')
-    for face_data in mesh_data['face_list']:
-        file.write('%d %d %d\n' % (face_data[0], face_data[1], face_data[2]))
+#mesh_list = model_archive['mesh_list']
+#file.write(str(len(mesh_list)) + '\n')
+#for mesh_data in mesh_list:
+#    file.write(str(len(mesh_data['face_list'])) + '\n')
+#    for face_data in mesh_data['face_list']:
+#        file.write('%d %d %d\n' % (face_data[0], face_data[1], face_data[2]))
 
-file.close()
+#file.close()
 
 #for f in model_archive['mesh_list']['face_list']:
 #    print(f)

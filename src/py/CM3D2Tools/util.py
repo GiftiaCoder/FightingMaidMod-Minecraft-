@@ -34,13 +34,16 @@ class type(enum.Enum):
     char = 'char'
     byte = 'byte'
     short = 'short'
+    ushort = 'ushort'
     int = 'int'
+    uint = 'uint'
     long = 'long'
+    ulong = 'ulong'
     float = 'float'
     double = 'double'
 
-data_type_size_map = { type.char:1, type.byte:1, type.short:2, type.int:4, type.long:8, type.float:4, type.double:8 }
-data_type_name_map = { type.char:'c', type.byte:'b', type.short:'h', type.int:'i', type.long:'l', type.float:'f', type.double:'d' }
+data_type_size_map = { type.char:1, type.byte:1, type.short:2, type.ushort:2, type.int:4, type.uint:4, type.long:8, type.ulong:8, type.float:4, type.double:8 }
+data_type_name_map = { type.char:'b', type.byte:'B', type.short:'h', type.ushort:'H', type.int:'i', type.uint:'I', type.long:'q', type.ulong:'Q', type.float:'f', type.double:'d' }
 
 def read(file, type):
     bytes = file.read(data_type_size_map[type])
@@ -52,3 +55,11 @@ def read_list(file, size, type):
     for i in range(size):
         float_array.append(read(file, type))
     return float_array
+
+class list_map(dict):
+    def add(self, key, item):
+        list = self.get(key)
+        if list == None:
+            list = []
+            self.__setitem__(self, key, list)
+        list.append(item)
