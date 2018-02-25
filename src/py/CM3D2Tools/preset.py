@@ -1,5 +1,21 @@
 import util
 
+def get_preset_attribute_name(idx):
+    class morph_name_list:
+        list = [ 'null_mpn', 'MuneL', 'MuneTare', 'RegFat', 'ArmL', 'Hara', 'RegMeet', 'KubiScl', 'UdeScl',
+                 'EyeScl', 'EyeSclX', 'EyeSclY', 'EyePosX', 'EyePosY', 'HeadX', 'HeadY', 'DouPer', 'sintyou',
+                 'koshi', 'kata', 'west', 'MuneUpDown', 'MuneYori', 'body', 'head', 'hairf', 'hairr', 'hairt',
+                 'hairs', 'wear', 'skirt', 'mizugi', 'bra', 'panz', 'stkg', 'shoes', 'headset', 'glove',
+                 'acchead', 'hairaho', 'accha', 'acchana', 'acckamisub', 'acckami', 'accmimi', 'accnip',
+                 'acckubi', 'acckubiwa', 'accheso', 'accude', 'accashi', 'accsenaka', 'accshippo',
+                 'accanl', 'accvag', 'megane', 'accxxx', 'handitem', 'acchat', 'haircolor', 'skin',
+                 'acctatoo', 'underhair', 'hokuro', 'mayu', 'lip', 'eye', 'eye_hi', 'chikubi', 'chikubicolor',
+                 'moza', 'onepiece', 'set_maidwear', 'set_mywear', 'set_underwear', 'folder_eye',
+                 'folder_mayu', 'folder_underhair', 'folder_skin', 'kousoku_upper', 'kousoku_lower',
+                 'seieki_naka', 'seieki_hara', 'seieki_face', 'seieki_mune', 'seieki_hip', 'seieki_ude',
+                 'seieki_ashi' ]
+    return morph_name_list.list[idx].lower()
+
 class preset_png:
     def __init__(self, file):
         self.png_size = util.read(file, util.type.int)
@@ -23,13 +39,13 @@ class block_a:
         self.min_value = util.read(file, util.type.int)
 
         block_a.num += 1
-        print('num a: %d' % block_a.num)
-        print('type: %08X' % self.type)
-        print('serial: %08X' % self.serial)
-        print('%d(%d, %d)' % (self.value, self.min_value, self.max_value))
-        print('unknown 1: %08X' % self.unknown1)
-        print(self.unknown2)
-        print()
+        #print('num a: %d' % block_a.num)
+        #print('type: %08X' % self.type)
+        #print('serial: %08X' % self.serial)
+        #print('%d(%d, %d)' % (self.value, self.min_value, self.max_value))
+        #print('unknown 1: %08X' % self.unknown1)
+        #print(self.unknown2)
+        #print()
 
 class block_b:
     num = 0
@@ -45,12 +61,12 @@ class block_b:
         self.unknown3 = util.read_list(file, 9, util.type.byte)
 
         block_b.num += 1
-        print('num b: %d' % block_b.num)
-        print('type: %08X' % self.type)
-        print('%s, %08X' % (self.menu, self.menu_hash))
-        print()
+        #print('num b: %d' % block_b.num)
+        #print('type: %08X' % self.type)
+        #print('%s, %08X' % (self.menu, self.menu_hash))
+        #print()
 
-def load_block_data(self, ver):
+def load_block_data(file, ver):
     type = util.read(file, util.type.uint)
     if type == 3:
         return block_b(file, type, ver)
@@ -99,7 +115,13 @@ class preset_archive:
             s += '%-12s: %s\n' % (m, self.__getattribute__(m))
         return s
 
-file = open('D:\\GAME\\CM3D2\\1.51.1\\CM3D2\\Preset\\pre_朝日奈穂乃香_20170724141332.preset', 'rb')
-arc = preset_archive(file)
-#arc.image.write_image(open('preset.png', 'wb'))
-file.close()
+def load_preset_morph_config(path):
+    config_map = {}
+    file = open(path, 'rb')
+    arc = preset_archive(file)
+    for config_idx in range(len(arc.morph_list)):
+        morph_config = arc.morph_list[config_idx].data
+        if type(morph_config) == block_a:
+            config_map[get_preset_attribute_name(config_idx)] = (morph_config.value, morph_config.min_value, morph_config.max_value)
+    file.close()
+    return config_map

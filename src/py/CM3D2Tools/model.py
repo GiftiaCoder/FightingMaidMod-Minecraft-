@@ -87,7 +87,7 @@ class morph:
 
     def read_morph_data(self, file):
         self.name = util.read_str(file)
-        print(self.name)
+        #print(self.name)
         self.morph_vertex_count = util.read(file, type.int)
         self.morph_vertex_list = []
         for morph_vertex_idx in range(self.morph_vertex_count):
@@ -155,12 +155,22 @@ class model_archive:
         for unknown_data_idx in range(unknown_data_count):
             unknwon_data = util.read_list(file, 4, type.float)
 
-file = open('D:\\DEV\\CM3D2\\ARC\\model\\model\\model\\body\\seieki\\spe_body0.model', 'rb')
+    def generate_model(self, file, morph_config_map):
+        final_vertex_list = self.vertex_list.copy()
+        for morph_data in self.morph_list:
+            val = morph_config_map[morph_data.name][0] / morph_config_map[morph_data.name][2]
+            for morph_vertex in morph_data.morph_vertex_list:
+                for i in range(3):
+                    final_vertex_list[morph_vertex.vertex_idx].coord[i] += morph_vertex.coord[i] * val
+                    final_vertex_list[morph_vertex.vertex_idx].normal[i] += morph_vertex.normal[i] * val
 
-arc = model_archive(file)
-
-#print(arc.root_bone)
-#for local_bone_idx in range(arc.local_bone_count):
-#    print('local bone name: ' + arc.local_bone_list[local_bone_idx].name)
-
-file.close()
+        util.write(file, '%i\n' % (self.vertex_count))
+        for vertex_data in final_vertex_list:
+            util.write(file, '%f %f %f %f %f %f\n'%
+                       (vertex_data.coord[0], vertex_data.coord[1], vertex_data.coord[2],
+                       vertex_data.normal[0], vertex_data.normal[1], vertex_data.normal[2]))
+        util.write(file, '%i\n' % (self.mesh_count))
+        for mesh_data in self.mesh_list:
+            util.write(file, '%i\n' % (mesh_data.face_num))
+            for face_data in mesh_data.face_list:
+                util.write(file, '%i %i %i\n' % (face_data[0], face_data[1], face_data[2]))

@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="Exception.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="model_algos.h" />
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="poi_demo_fmm_entity_renderer_ModelHuman.h" />
     <ClInclude Include="poi_demo_fmm_entity_renderer_ModelHuman_CustomModelRenderer.h" />

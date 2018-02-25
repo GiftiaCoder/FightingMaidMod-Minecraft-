@@ -1,14 +1,6 @@
 import struct
 import enum
 
-def read_str(file, total_b = ''):
-    for i in range(9):
-        b_str = format(struct.unpack('<B', file.read(1))[0], '08b')
-        total_b = b_str[1:] + total_b
-        if b_str[0] == '0':
-            break
-    return file.read(int(total_b, 2)).decode('utf-8')
-
 def read_bytes(file, size):
     return file.read(size)
 
@@ -23,10 +15,20 @@ class type(enum.Enum):
     ulong = 'ulong', 8, 'Q'
     float = 'float', 4, 'f'
     double = 'double', 8, 'd'
+    str = 'string', -1, '\0'
 
     def read(self, file):
-        bytes = file.read(self._value_[1])
-        return struct.unpack('<' + self._value_[2], bytes)[0]
+        if self != type.str:
+            bytes = file.read(self._value_[1])
+            return struct.unpack('<' + self._value_[2], bytes)[0]
+        else:
+            total_b = ''
+            for i in range(9):
+                b_str = format(struct.unpack('<B', file.read(1))[0], '08b')
+                total_b = b_str[1:] + total_b
+                if b_str[0] == '0':
+                    break
+            return file.read(int(total_b, 2)).decode('utf-8')
 
     def read_list(self, file, count):
         data_list = []
@@ -39,6 +41,12 @@ def read(file, type):
 
 def read_list(file, size, type):
     return type.read_list(file, size)
+
+def read_str(file):
+    return type.str.read(file)
+
+def write(file, str):
+    file.write(bytes(str, 'utf-8'))
 
 class list_map(dict):
     def add(self, key, item):

@@ -55,14 +55,15 @@ public class ModelHuman extends ModelBiped
 	
 	public ModelHuman()
 	{
-		bipedHead = new CustomModelRenderer(this, "model.arc");
-		bipedHead.showModel = true;
+		bipedRightLeg = new CustomModelRenderer(this, "spe_body0.model.txt");
+		
+		bipedHead.showModel = false;
 		bipedBody.showModel = false;
 		
 		bipedHeadwear.showModel = false;
 		bipedRightArm.showModel = false;
 		bipedLeftArm.showModel = false;
-		bipedRightLeg.showModel = false;
+		bipedRightLeg.showModel = true;
 		bipedLeftLeg.showModel = false;
 	}
 }
