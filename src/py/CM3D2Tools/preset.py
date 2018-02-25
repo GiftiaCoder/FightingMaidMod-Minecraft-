@@ -44,12 +44,11 @@ class block_b:
         self.menu_hash = util.read(file,util.type.uint)
         self.unknown3 = util.read_list(file, 9, util.type.byte)
 
-        if self.menu != '':
-            block_b.num += 1
-            print('num b: %d' % block_b.num)
-            print('type: %08X' % self.type)
-            print('%s, %08X' % (self.menu, self.menu_hash))
-            print()
+        block_b.num += 1
+        print('num b: %d' % block_b.num)
+        print('type: %08X' % self.type)
+        print('%s, %08X' % (self.menu, self.menu_hash))
+        print()
 
 def load_block_data(self, ver):
     type = util.read(file, util.type.uint)

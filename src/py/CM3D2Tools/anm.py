@@ -47,11 +47,11 @@ class anm_archive:
 
             self.bone_transform_list.append(bone_transform_data(bone_name, frame_map))
 
-file = open('D:\\DEV\\CM3D2\\ARC\\motion\\motion\\_maid\\maid_stand01.anm', 'rb')
+file = open('D:\\DEV\\CM3D2\\ARC\\motion\\motion\\dance\\dance_cm3d2_001_f2.anm', 'rb')
 arc = anm_archive(file)
 file.close()
 
-out = open('..\\..\\..\\run\\maid_stand01.anm.txt', 'w')
+out = open('..\\..\\..\\run\\dance_cm3d2_001_f2.anm.txt', 'w')
 for bone in arc.bone_transform_list:
     out.write(bone.bone_name + '\n')
     for k in bone.frame_map:

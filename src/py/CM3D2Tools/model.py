@@ -1,200 +1,166 @@
 import util
+from util import type
 
-def load_model(model_path, model):
-    file = open(model_path, 'rb')
+class bone:
+    def read_name(self, file):
+        self.name = util.read_str(file)
+        unknown = util.read(file, type.byte)
 
-    model['ext'] = util.read_str(file)
-    model['ver'] = util.read_int(file)
-    model['name'] = util.read_str(file)
-    model['base_bone'] = util.read_str(file)
+    def read_parent(self, file):
+        self.parent_idx = util.read(file, type.int)
 
-    model['bone_count'] = bone_count = util.read_int(file)
-    model['bone_data'] = bone_data = []
-    for bone_idx in range(bone_count):
-        bone_data.append({})
-        bone_data[bone_idx]['name'] = util.read_str(file)
-        bone_data[bone_idx]['unknown'] = util.read_byte(file)
-    for bone_idx in range(bone_count):
-        bone_data[bone_idx]['parent_idx'] = parent_idx = util.read_int(file)
-        if parent_idx != -1:
-            bone_data[bone_idx]['parent_name'] = bone_data[parent_idx]['name']
-        else:
-            bone_data[bone_idx]['parent_name'] = None
-    for bone_idx in range(bone_count):
-        bone_data[bone_idx]['rotation_coord'] = util.read_array(file, 3, util.read_float)
-        bone_data[bone_idx]['rotation_axis'] = util.read_array(file, 3, util.read_float)
-        bone_data[bone_idx]['rotation_angle'] = util.read_float(file)
+    def read_rotation_data(self, file):
+        self.rotation_coord = util.read_list(file, 3, type.float)
+        self.rotation_axis = util.read_list(file, 3, type.float)
+        self.rotation_angle = util.read(file, type.float)
 
-    model['vertex_num'] = vertex_num = util.read_int(file)
-    model['mesh_count'] = mesh_count = util.read_int(file)
-    model['local_bone_count'] = local_bone_count = util.read_int(file)
+class local_bone:
+    def read_name(self, file):
+        self.name = util.read_str(file)
 
-    model['local_bone_list'] = local_bone_list = []
-    for local_bone_idx in range(local_bone_count):
-        local_bone_list.append({})
-        local_bone_list[local_bone_idx]['name'] = util.read_str(file)
-    for local_bone_idx in range(local_bone_count):
-        local_bone_list[local_bone_idx]['transform_matrix'] = util.read_array(file, 4 * 4, util.read_float)
+    def read_transform_matrix(self, file):
+        self.transform_matrix = util.read_list(file, 4 * 4, type.float)
 
-    model['vertex_list'] = vertex_list = []
-    for vertex_idx in range(vertex_num):
-        vertex_list.append({})
-        vertex_list[vertex_idx]['coord'] = util.read_array(file, 3, util.read_float)
-        vertex_list[vertex_idx]['normal'] = util.read_array(file, 3, util.read_float)
-        vertex_list[vertex_idx]['uv'] = util.read_array(file, 2, util.read_float)
+class vertex:
+    def read_coord(self, file):
+        self.coord = util.read_list(file, 3, type.float)
+        self.normal = util.read_list(file, 3, type.float)
+        self.uv = util.read_list(file, 2, type.float)
 
-    model['unknown_data_num'] = unknown_data_num = util.read_int(file)
-    model['unknown_data_list'] = unknown_data_list = []
-    for unknown_data_idx in range(unknown_data_num):
-        unknown_data_list.append({})
-        unknown_data_list[unknown_data_idx]['data'] = util.read_array(file, 4, util.read_float)
+    def read_bone_weight(self, file):
+        self.bone_list = util.read_list(file, 4, type.ushort)
+        self.weight_list = util.read_list(file, 4, type.float)
 
-    for vertex_idx in range(vertex_num):
-        vertex_list[vertex_idx]['weights'] = weight_data = {}
-        weight_data['bone_idx'] = util.read_array(file, 4, util.read_ushort)
-        weight_data['bone_weight'] = util.read_array(file, 4, util.read_float)
+class mesh:
+    def read_mesh_data(self, file):
+        self.face_num = int(util.read(file, type.int) / 3)
+        self.face_list = []
+        for face_idx in range(self.face_num):
+            self.face_list.append(util.read_list(file, 3, type.ushort))
 
-    model['mesh_list'] = mesh_list = []
-    #print('mesh count: %d' % (mesh_count))
-    for mesh_idx in range(mesh_count):
-        mesh_list.append({})
-        mesh_list[mesh_idx]['face_num'] = face_num = int(util.read_int(file) / 3)
-        #print('mesh %d has %d faces' % (mesh_idx, face_num))
-        mesh_list[mesh_idx]['face_list'] = face_list = []
-        for face_idx in range(face_num):
-            ary = util.read_array(file, 3, util.read_ushort)
-            #print(ary)
-            face_list.append(ary)
+class material:
+    class tex:
+        def __init__(self, mat_type, file):
+            self.mat_type = mat_type
+            self.name = util.read_str(file)
+            self.type = util.read_str(file)
+            if self.type == 'tex2d':
+                self.name2 = util.read_str(file)
+                self.path = util.read_str(file)
+                self.color = util.read_list(file, 4, type.float)
 
-    model['material_count'] = material_count = util.read_int(file)
-    model['material_data'] = material_data = []
-    for material_idx in range(material_count):
-        material_data.append({})
-        material_data[material_idx]['name'] = util.read_str(file)
-        #print('material name: %s' % material_data[material_idx]['name'])
-        material_data[material_idx]['type1'] = util.read_str(file)
-        #print('material type1: %s' % material_data[material_idx]['type1'])
-        material_data[material_idx]['type2'] = util.read_str(file)
-        #print('material type2: %s' % material_data[material_idx]['type2'])
-        material_data[material_idx]['data'] = data = []
+    class col:
+        def __init__(self, mat_type, file):
+            self.mat_type = mat_type
+            self.name = util.read_str(file)
+            self.color = util.read_list(file, 4, type.float)
+
+    class f:
+        def __init__(self, mat_type, file):
+            self.mat_type = mat_type
+            self.name = util.read_str(file)
+            self.data = util.read(file, type.float)
+
+    def read_material_data(self, file):
+        self.name = util.read_str(file)
+        self.type1 = util.read_str(file)
+        self.type2 = util.read_str(file)
+        self.mat_list = []
         while True:
             type = util.read_str(file)
-            #print('type: %s' % type)
             if type == 'tex':
-                data.append({})
-                data[-1]['name'] = util.read_str(file)
-                #print('name: %s' % (data[-1]['name']))
-                data[-1]['type2'] = util.read_str(file)
-                #print('type2: %s' % (data[-1]['type2']))
-                if data[-1]['type2'] == 'tex2d':
-                    data[-1]['name2'] = util.read_str(file)
-                    data[-1]['path'] = util.read_str(file)
-                    #print('path: %s' % (data[-1]['path']))
-                    data[-1]['color'] = util.read_array(file, 4, util.read_float)
+                self.mat_list.append(material.tex(type, file))
             elif type == 'col':
-                data.append({})
-                data[-1]['name'] = util.read_str(file)
-                #print(data[-1]['name'])
-                data[-1]['color'] = util.read_array(file, 4, util.read_float)
+                self.mat_list.append(material.col(type, file))
             elif type == 'f':
-                data.append({})
-                data[-1]['name'] = util.read_str(file)
-                #print(data[-1]['name'])
-                data[-1]['float'] = util.read_float(file)
+                self.mat_list.append(material.f(type, file))
+            else:
+                break
+        return self
+
+class morph:
+    class morph_vertex:
+        def __init__(self, file):
+            self.vertex_idx = util.read(file, type.ushort)
+            self.coord = util.read_list(file, 3, type.float)
+            self.normal = util.read_list(file, 3, type.float)
+
+    def read_morph_data(self, file):
+        self.name = util.read_str(file)
+        print(self.name)
+        self.morph_vertex_count = util.read(file, type.int)
+        self.morph_vertex_list = []
+        for morph_vertex_idx in range(self.morph_vertex_count):
+            self.morph_vertex_list.append(morph.morph_vertex(file))
+        return self
+
+class model_archive:
+    def __init__(self, file):
+        self.ext = util.read_str(file)
+        self.ver = util.read(file, type.int)
+        self.name = util.read_str(file)
+        self.root_bone = util.read_str(file)
+
+        self.bone_count = util.read(file, type.int)
+        self.bone_list = []
+        for bone_idx in range(self.bone_count):
+            self.bone_list.append(bone())
+            self.bone_list[bone_idx].read_name(file)
+        for bone_idx in range(self.bone_count):
+            self.bone_list[bone_idx].read_parent(file)
+        for bone_idx in range(self.bone_count):
+            self.bone_list[bone_idx].read_rotation_data(file)
+
+        self.vertex_count = util.read(file, type.int)
+        self.mesh_count = util.read(file, type.int)
+        self.local_bone_count = util.read(file, type.int)
+
+        self.local_bone_list = []
+        for local_bone_idx in range(self.local_bone_count):
+            self.local_bone_list.append(local_bone())
+            self.local_bone_list[local_bone_idx].read_name(file)
+        for local_bone_idx in range(self.local_bone_count):
+            self.local_bone_list[local_bone_idx].read_transform_matrix(file)
+
+        self.vertex_list = []
+        for vertex_idx in range(self.vertex_count):
+            self.vertex_list.append(vertex())
+            self.vertex_list[vertex_idx].read_coord(file)
+
+        self.read_unknown_data(file)
+
+        for vertex_idx in range(self.vertex_count):
+            self.vertex_list[vertex_idx].read_bone_weight(file)
+
+        self.mesh_list = []
+        for mesh_idx in range(self.mesh_count):
+            self.mesh_list.append(mesh())
+            self.mesh_list[mesh_idx].read_mesh_data(file)
+
+        self.material_count = util.read(file, type.int)
+        self.material_list = []
+        for material_idx in range(self.material_count):
+            self.material_list.append(material().read_material_data(file))
+
+        self.morph_list = []
+        while True:
+            flag = util.read_str(file)
+            if flag == 'morph':
+                self.morph_list.append(morph().read_morph_data(file))
             else:
                 break
 
-    model['morph_list'] = morph_list = []
-    while True:
-        flag = util.read_str(file)
-        if flag == 'morph':
-            morph_list.append({})
-            morph_list[-1]['name'] = util.read_str(file)
-            #print('morph name: %s' % (morph_list[-1]['name']))
-            morph_list[-1]['vertex_num']  = morph_vertex_num = util.read_int(file)
-            morph_list[-1]['vertex_data'] = morph_vertex_data = []
-            for morph_vertex_idx in range(morph_vertex_num):
-                morph_vertex_data.append({})
-                morph_vertex_data[morph_vertex_idx]['vertex_idx'] = util.read_ushort(file)
-                morph_vertex_data[morph_vertex_idx]['coord'] = util.read_array(file, 3, util.read_float)
-                morph_vertex_data[morph_vertex_idx]['normal'] = util.read_array(file, 3, util.read_float)
-        else:
-            break
+    def read_unknown_data(self, file):
+        unknown_data_count = util.read(file, type.int)
+        for unknown_data_idx in range(unknown_data_count):
+            unknwon_data = util.read_list(file, 4, type.float)
 
-    file.close()
+file = open('D:\\DEV\\CM3D2\\ARC\\model\\model\\model\\body\\seieki\\spe_body0.model', 'rb')
 
-def build_model(model_archive, model):
-    #TODO
-    pass
+arc = model_archive(file)
 
-def print_list(f, l, prefix = ''):
-    for e in l:
-        if type(e) == list:
-            print_list(f, e, prefix + '\t')
-        elif type(e) == dict:
-            print_dict(f, e, prefix + '\t')
-        else:
-            f.write('%s%s\n' % (prefix, str(e)))
+#print(arc.root_bone)
+#for local_bone_idx in range(arc.local_bone_count):
+#    print('local bone name: ' + arc.local_bone_list[local_bone_idx].name)
 
-def print_dict(f, d, prefix = ''):
-    for k in d:
-        v = d[k]
-        if type(v) == dict:
-            f.write('%s%s:\n' % (prefix, k))
-            print_dict(f, v, prefix + '\t')
-        elif type(v) == list:
-            f.write('%s%s:\n' % (prefix, k))
-            print_list(f, v, prefix + '\t')
-        else:
-            f.write('%s%s: %s\n' % (prefix, str(k), str(v)))
-            #print('%s%s: %s' % (prefix, str(k), str(v)))
-
-def analyze_morph(model):
-    file = open('morph.txt', 'w')
-    for morph in model['morph_list']:
-        file.write('%s, %d\n' % (morph['name'], morph['vertex_num']))
-        for vertex in morph['vertex_data']:
-            file.write(str(vertex) + '\n')
-    file.close()
-
-model_archive = {}
-model = {}
-load_model('D:\\DEV\\CM3D2\\ARC\\model\\model\\model\\body\\seieki\\spe_body0.model', model_archive)
-build_model(model_archive, model)
-
-analyze_morph(model_archive)
-
-#print('----------------------------------------')
-#print(model_archive['base_bone'])
-#print('----------------------------------------')
-#print(model_archive['local_bone_list'])
-#print('----------------------------------------')
-#print(model_archive['bone_data'])
-#print('----------------------------------------')
-
-#file = open('..\\..\\..\\run\\face005.model.txt', 'w')
-#
-#file.write(str(len(model_archive['vertex_list'])) + '\n')
-#for vertex in model_archive['vertex_list']:
-    #print(vertex)
-#    coord = vertex['coord']
-#    normal = vertex['normal']
-#    file.write('%s %s %s %s %s %s\n' %
-#               (str(coord[0]), str(coord[1]), str(coord[2]),
-#                str(normal[0]), str(normal[1]), str(normal[2])))
-
-#mesh_list = model_archive['mesh_list']
-#file.write(str(len(mesh_list)) + '\n')
-#for mesh_data in mesh_list:
-#    file.write(str(len(mesh_data['face_list'])) + '\n')
-#    for face_data in mesh_data['face_list']:
-#        file.write('%d %d %d\n' % (face_data[0], face_data[1], face_data[2]))
-
-#file.close()
-
-#for f in model_archive['mesh_list']['face_list']:
-#    print(f)
-
-#file = open('model.arc', 'w')
-#print_dict(file, model_archive)
-#file.close()
+file.close()
