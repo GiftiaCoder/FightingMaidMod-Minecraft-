@@ -148,16 +148,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="BoneGroup.cpp" />
+    <ClCompile Include="FormatFileReader.cpp" />
     <ClCompile Include="impl.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="ObjModel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Exception.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="BoneGroup.h" />
+    <ClInclude Include="FormatFileReader.h" />
     <ClInclude Include="model_algos.h" />
-    <ClInclude Include="ObjModel.h" />
     <ClInclude Include="poi_demo_fmm_entity_renderer_ModelHuman.h" />
     <ClInclude Include="poi_demo_fmm_entity_renderer_ModelHuman_CustomModelRenderer.h" />
   </ItemGroup>

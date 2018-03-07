@@ -47,6 +47,14 @@ struct Vector
 	{
 		return v[i];
 	}
+
+	std::iostream &operator >> (std::iostream &in)
+	{
+		for (size_t i = 0; i < s; ++i)
+		{
+			in >> v[i];
+		}
+	}
 };
 
 class FileFormatReader
@@ -141,8 +149,6 @@ public:
 	}
 };
 
-#include "ObjModel.h"
-
 #define PI (3.1415926)
 
 JNIEXPORT void JNICALL Java_poi_demo_fmm_entity_renderer_ModelHuman_00024CustomModelRenderer_renderCustomModel
@@ -154,8 +160,6 @@ JNIEXPORT void JNICALL Java_poi_demo_fmm_entity_renderer_ModelHuman_00024CustomM
 	if (rotateAngleX) glRotatef(rotateAngleX * (180.0F / (float)PI), 1.0F, 0.0F, 0.0F);
 	if (rotateAngleZ) glRotatef(rotateAngleZ * (180.0F / (float)PI), 0.0F, 0.0F, 1.0F);
 
-	//std::cout << "model addr: " << jlong2ptr(modelId) << std::endl;
-	//((CObjModel *)jlong2ptr(modelId))->render();
 	((Model *)jlong2ptr(modelId))->doRender();
 
 	glPopMatrix();
