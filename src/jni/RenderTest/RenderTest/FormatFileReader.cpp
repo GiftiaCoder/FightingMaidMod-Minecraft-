@@ -1,6 +1,6 @@
 #include "FormatFileReader.h"
 
-FormatFileReader::FormatFileReader(std::ifstream &is) : in(is)
+FormatFileReader::FormatFileReader(const char *path) : in(path, std::ios::binary)
 {
 	// do nothing
 }

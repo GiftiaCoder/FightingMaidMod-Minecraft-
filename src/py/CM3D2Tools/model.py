@@ -1,5 +1,6 @@
 import util
 from util import type
+from util import list_map
 
 class bone:
     def read_name(self, file):
@@ -155,14 +156,23 @@ class model_archive:
         for unknown_data_idx in range(unknown_data_count):
             unknwon_data = util.read_list(file, 4, type.float)
 
-    def generate_model(self, file, morph_config_map):
+    def morph_model(self, morph_config_map):
         final_vertex_list = self.vertex_list.copy()
         for morph_data in self.morph_list:
-            val = morph_config_map[morph_data.name][0] / morph_config_map[morph_data.name][2]
+            val = 0
+            if morph_config_map.__contains__(morph_data.name):
+                val = morph_config_map[morph_data.name][0] / morph_config_map[morph_data.name][2]
+            else:
+                print('cannot find preset data %s' % (morph_data.name))
+
             for morph_vertex in morph_data.morph_vertex_list:
                 for i in range(3):
                     final_vertex_list[morph_vertex.vertex_idx].coord[i] += morph_vertex.coord[i] * val
                     final_vertex_list[morph_vertex.vertex_idx].normal[i] += morph_vertex.normal[i] * val
+        return final_vertex_list
+
+    def generate_model(self, file, morph_config_map):
+        final_vertex_list = self.morph_model(morph_config_map)
 
         util.write(file, '%i\n' % (self.vertex_count))
         for vertex_data in final_vertex_list:
@@ -174,3 +184,93 @@ class model_archive:
             util.write(file, '%i\n' % (mesh_data.face_num))
             for face_data in mesh_data.face_list:
                 util.write(file, '%i %i %i\n' % (face_data[0], face_data[1], face_data[2]))
+
+    def generate_bone_archive(self, file):
+        util.write(file, '%i\n' % self.bone_count)
+        for bone_data in self.bone_list:
+            parent_bone_name = 'null'
+            if bone_data.parent_idx != -1:
+                parent_bone_name = self.bone_list[bone_data.parent_idx].name
+            util.write(file, '%s\n%s\n%f %f %f %f %f %f %f\n' %
+                       (bone_data.name, parent_bone_name,
+                        bone_data.rotation_coord[0], bone_data.rotation_coord[1], bone_data.rotation_coord[2],
+                        bone_data.rotation_axis[0], bone_data.rotation_axis[1], bone_data.rotation_axis[2],
+                        bone_data.rotation_angle))
+
+    def print_child_bone(self, name, bone_name_map, parent_list, prefix, local_bone_name_set):
+        print(prefix + name)
+        for parent in parent_list:
+            if local_bone_name_set.__contains__(parent):
+                print('\033[0;31;40m', end='')
+
+            if bone_name_map.__contains__(parent):
+                self.print_child_bone(parent, bone_name_map, bone_name_map[parent], prefix + '  | ', local_bone_name_set)
+            else:
+                print(prefix + '  | ' + parent)
+
+            if local_bone_name_set.__contains__(parent):
+                print('\033[0m', end='')
+
+    def print_bone_tree(self):
+        bone_name_map = list_map()
+        for bone_data in self.bone_list:
+            if bone_data.parent_idx != -1:
+                bone_name_map.add(self.bone_list[bone_data.parent_idx].name, bone_data.name)
+            else:
+                bone_name_map.add('(null)', bone_data.name)
+        local_name_set = set()
+        for local_bone in self.local_bone_list:
+            local_name_set.add(local_bone.name)
+        self.print_child_bone('(null)', bone_name_map, bone_name_map['(null)'], '', local_name_set)
+
+    def create_parent_map(self):
+        parent_map = {}
+        for bone_data in self.bone_list:
+            if bone_data.parent_idx != -1:
+                parent_map[bone_data.name] = self.bone_list[bone_data.parent_idx].name
+        return parent_map
+
+    def create_local_bone_name_map(self):
+        bone_map = {}
+        for local_bone in self.local_bone_list:
+            bone_map[local_bone.name] = local_bone
+        return bone_map
+
+    def get_transform_matrix(self, local_bone, matrix, parent_map, bone_map):
+        util.multiply_matrix(matrix, local_bone.transform_matrix)
+        if parent_map.__contains__(local_bone.name):
+            self.get_transform_matrix(bone_map[parent_map[local_bone.name]], matrix, parent_map, bone_map)
+
+    def write(self, file, morph_config_map):
+        #for bone_data in self.local_bone_list:
+        #    print(bone_data.name)
+        #bone
+        type.str.write(file, 'bone')
+        type.int.write(file, self.local_bone_count)
+        for bone_data in self.local_bone_list:
+            type.str.write(file, bone_data.name)
+
+            transform_matrix = util.identity_matrix()
+            print(transform_matrix)
+            self.get_transform_matrix(bone_data, transform_matrix, self.create_parent_map(), self.create_local_bone_name_map())
+            print(transform_matrix)
+            type.float.write_list(file, transform_matrix)
+
+            #type.float.write_list(file, bone_data.transform_matrix)
+        #vertex
+        type.str.write(file, 'vertex')
+        type.int.write(file, self.vertex_count)
+        for vertex in self.morph_model(morph_config_map):
+        #for vertex in self.vertex_list:
+            type.float.write_list(file, vertex.coord)
+            type.float.write_list(file, vertex.normal)
+            type.float.write_list(file, vertex.uv)
+            type.int.write_list(file, vertex.bone_list)
+            type.float.write_list(file, vertex.weight_list)
+        #mesh
+        type.str.write(file, 'mesh')
+        type.int.write(file, self.mesh_count)
+        for mesh in self.mesh_list:
+            type.int.write(file, mesh.face_num)
+            for face in mesh.face_list:
+                type.int.write_list(file, face)

@@ -21,10 +21,19 @@
     <ClCompile Include="impl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="BoneGroup.cpp">
+    <ClCompile Include="FormatFileReader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="FormatFileReader.cpp">
+    <ClCompile Include="BoneGroup.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexGroup.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshGroup.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,14 +44,23 @@
     <ClInclude Include="poi_demo_fmm_entity_renderer_ModelHuman_CustomModelRenderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="model_algos.h">
+    <ClInclude Include="FormatFileReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexGroup.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
       <Filter>model</Filter>
     </ClInclude>
     <ClInclude Include="BoneGroup.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshGroup.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FormatFileReader.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="GLUtil.h">
+      <Filter>model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -151,13 +151,19 @@
     <ClCompile Include="BoneGroup.cpp" />
     <ClCompile Include="FormatFileReader.cpp" />
     <ClCompile Include="impl.cpp" />
+    <ClCompile Include="MeshGroup.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="VertexGroup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoneGroup.h" />
     <ClInclude Include="FormatFileReader.h" />
-    <ClInclude Include="model_algos.h" />
+    <ClInclude Include="GLUtil.h" />
+    <ClInclude Include="MeshGroup.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="poi_demo_fmm_entity_renderer_ModelHuman.h" />
     <ClInclude Include="poi_demo_fmm_entity_renderer_ModelHuman_CustomModelRenderer.h" />
+    <ClInclude Include="VertexGroup.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

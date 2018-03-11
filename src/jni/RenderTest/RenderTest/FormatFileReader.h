@@ -8,7 +8,7 @@
 class FormatFileReader
 {
 public:
-	FormatFileReader(std::ifstream &is);
+	FormatFileReader(const char *path);
 
 public:
 	void ReadStr(std::string &out);
@@ -26,6 +26,6 @@ public:
 	}
 
 private:
-	std::ifstream &in;
+	std::ifstream in;
 };
 
