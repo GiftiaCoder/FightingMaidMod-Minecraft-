@@ -1,2 +1,2 @@
 # FightingMaidMod-Minecraft-
-anything interesting
+# (CustomMaidMod)
